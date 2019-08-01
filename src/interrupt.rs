@@ -1,7 +1,7 @@
 //! Interrupts
 
-pub use bare_metal::{CriticalSection, Mutex, Nr};
 use crate::asm::*;
+pub use bare_metal::{CriticalSection, Mutex, Nr};
 
 /// Disables all interrupts
 #[inline]
@@ -23,15 +23,17 @@ pub unsafe fn enable() {
 ///
 /// This as also known as a "critical section".
 pub fn free<F, R>(f: F) -> R
-    where
-        F: FnOnce(&CriticalSection) -> R,
+where
+    F: FnOnce(&CriticalSection) -> R,
 {
     // disable interrupts
     let old_mask = unsafe { maskirq(0xffff_ffff) };
 
     let r = f(unsafe { &CriticalSection::new() });
 
-    unsafe { maskirq(old_mask); }
+    unsafe {
+        maskirq(old_mask);
+    }
 
     r
 }

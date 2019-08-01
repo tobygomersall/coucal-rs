@@ -12,5 +12,8 @@ edition = "2018"
 [dependencies]
 bare-metal = "0.2.0"
 
+[build-dependencies]
+regex = "1.2.0"
+
 [features]
 inline-asm = []

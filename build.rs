@@ -7,8 +7,25 @@ fn main() {
     let name = env::var("CARGO_PKG_NAME").unwrap();
 
     if target.starts_with("riscv") && env::var_os("CARGO_FEATURE_INLINE_ASM").is_none() {
+        let target_flags_regex = regex::Regex::new("riscv32([a-z]+)-unknown-none-elf").unwrap();
+        let unimportant_flags = regex::Regex::new("[ma]").unwrap();
+        let target_with_important_flags = unimportant_flags.replace_all(
+            target_flags_regex
+                .captures(&target)
+                .expect(
+                    "RISC-V target doesn't match the pattern 'riscv32([a-z]+)-unknown-none-elf'",
+                )
+                .get(1)
+                .unwrap()
+                .as_str(),
+            "",
+        );
+
+        let target_with_important_flags =
+            format!("riscv32{}-unknown-none-elf", target_with_important_flags);
+
         fs::copy(
-            format!("bin/{}.a", target),
+            format!("bin/{}.a", target_with_important_flags),
             out_dir.join(format!("lib{}.a", name)),
         ).unwrap();
 
