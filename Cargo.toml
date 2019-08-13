@@ -18,3 +18,4 @@ regex = "1.2.0"
 [features]
 inline-asm = []
 const-fn = ["bare-metal/const-fn"]
+interrupts-qregs = []

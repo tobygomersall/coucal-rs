@@ -141,3 +141,97 @@ pub unsafe fn timer(cycles_to_wait: u32) -> u32 {
         () => unimplemented!(),
     }
 }
+
+/// `getq` instruction wrapper (`getq __, q2`)
+///
+/// Original documentation from [https://github.com/cliffordwolf/picorv32/blob/master/README.md#timer]:
+///
+/// getq rd, qs
+///
+/// This instruction copies the value from a q-register to a general-purpose register.
+///
+///     0000000 ----- 000XX --- XXXXX 0001011
+///     f7      rs2   qs    f3  rd    opcode
+///
+/// Example:
+///
+///     getq x5, q2
+#[inline]
+#[allow(unused_variables)]
+#[cfg(feature = "interrupt-qregs")]
+pub unsafe fn getq2() -> u32 {
+    match () {
+        #[cfg(all(riscv, feature = "inline-asm"))]
+        () => {
+            let ret: u32;
+            asm!(
+                            ".word (((0b0000000) << 25) | ((0) << 20) | ((2) << 15) | ((0) << 12) | ((10) << 7) | ((0b0001011) << 0))"
+            //                ".insn r OPC_OP 0b0001011, 0b000, 0b0000000, $0, 2, 0b00000"
+                            : "={x10}"(ret)
+                            :
+                            :
+                            : "volatile"
+                        );
+            ret
+        }
+
+        #[cfg(all(riscv, not(feature = "inline-asm")))]
+        () => {
+            extern "C" {
+                fn __getq2() -> u32;
+            }
+
+            __getq2()
+        }
+
+        #[cfg(not(riscv))]
+        () => unimplemented!(),
+    }
+}
+
+/// `getq` instruction wrapper (`getq __, q3`)
+///
+/// Original documentation from [https://github.com/cliffordwolf/picorv32/blob/master/README.md#timer]:
+///
+/// getq rd, qs
+///
+/// This instruction copies the value from a q-register to a general-purpose register.
+///
+///     0000000 ----- 000XX --- XXXXX 0001011
+///     f7      rs2   qs    f3  rd    opcode
+///
+/// Example:
+///
+///     getq x5, q2
+#[inline]
+#[allow(unused_variables)]
+#[cfg(feature = "interrupt-qregs")]
+pub unsafe fn getq3() -> u32 {
+    match () {
+        #[cfg(all(riscv, feature = "inline-asm"))]
+        () => {
+            let ret: u32;
+            asm!(
+                            ".word (((0b0000000) << 25) | ((0) << 20) | ((3) << 15) | ((0) << 12) | ((10) << 7) | ((0b0001011) << 0))"
+            //                ".insn r OPC_OP 0b0001011, 0b000, 0b0000000, $0, 3, 0b00000"
+                            : "={x10}"(ret)
+                            :
+                            :
+                            : "volatile"
+                        );
+            ret
+        }
+
+        #[cfg(all(riscv, not(feature = "inline-asm")))]
+        () => {
+            extern "C" {
+                fn __getq3() -> u32;
+            }
+
+            __getq3()
+        }
+
+        #[cfg(not(riscv))]
+        () => unimplemented!(),
+    }
+}

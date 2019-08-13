@@ -8,8 +8,10 @@ crate=picorv32
 rm -f bin/*.a
 
 for arch in i ic; do
-  riscv64-unknown-elf-gcc -c -mabi=ilp32 -march=rv32$arch asm.S -o bin/$crate.o
-  ar crs bin/riscv32$arch-unknown-none-elf.a bin/$crate.o
+	for cpu_features in RV32RT_BARE RV32RT_INTERRUPTS_QREGS; do
+    riscv64-unknown-elf-gcc -c -mabi=ilp32 -march=rv32$arch -D$cpu_features asm.S -o bin/$crate.o
+    ar crs bin/riscv32${arch}-unknown-none-elf_${cpu_features}.a bin/$crate.o
+  done
 done
 
 rm bin/$crate.o
