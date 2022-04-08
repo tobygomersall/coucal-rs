@@ -1,9 +1,15 @@
 #include "custom_ops.S"
 
+.section .text.__retirq
+.global __retirq
+__retirq:
+    picorv32_retirq_insn()
+    ret
+
 .section .text.__maskirq
 .global __maskirq
 __maskirq:
-    mv a0, a1
+    mv a1, a0
     picorv32_maskirq_insn(a0, a1)
     ret
 
@@ -16,7 +22,7 @@ __waitirq:
 .section .text.__timer
 .global __timer
 __timer:
-    mv a0, a1
+    mv a1, a0
     picorv32_timer_insn(a0, a1)
     ret
 
@@ -32,6 +38,20 @@ __getq2:
 .global __getq3
 __getq3:
     picorv32_getq_insn(a0, q3)
+    ret
+
+.section .text.__setq2
+.global __setq2
+__setq2:
+    mv a1, a0
+    picorv32_setq_insn(q2, a1)
+    ret
+
+.section .text.__setq3
+.global __setq3
+__setq3:
+    mv a1, a0
+    picorv32_setq_insn(q3, a1)
     ret
 
 #endif
