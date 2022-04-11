@@ -14,7 +14,6 @@
 
 #![no_std]
 #![deny(warnings)]
-#![cfg_attr(feature = "inline-asm", feature(asm))]
 
 extern crate bare_metal;
 

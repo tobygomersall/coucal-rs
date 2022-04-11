@@ -32,8 +32,6 @@
 #[cfg(all(riscv, feature = "inline-asm"))]
 use core::arch::asm;
 
-//FIXME Do all of these work in both the in line asm case and the hard coded case?
-
 /// `getq` instruction wrapper (`getq __, q2`)
 ///
 /// This function returns the value from the `q2` q-register.
@@ -48,14 +46,19 @@ pub unsafe fn getq2() -> u32 {
         () => {
             let ret: u32;
 
-            //FIXME Does specifying q2 here work?
             // The picorv32 getq2 specific values:
             //
             //     func7 = 0b0000000
             //     rd    = ret register
-            //     rs1   = q2
+            //     rs1   = q2           (x2 used in place)
+            //
+            // NOTE: The `.insn` requires a register name for `rs1` but the
+            // compiler is not aware of the `q` registers as they are picorv32
+            // specific. To work around this we use the `x` register
+            // equivalents. In this case we want to read from `q2` which is
+            // offset 2, therefore we use `x2` to achieve this.
             asm!(
-                ".insn r 0b0001011, 0, 0b0000000, {0}, q2, zero",
+                ".insn r 0b0001011, 0, 0b0000000, {0}, x2, zero",
                 out(reg) ret,
                 );
 
@@ -90,14 +93,19 @@ pub unsafe fn getq3() -> u32 {
         () => {
             let ret: u32;
 
-            //FIXME Does specifying q3 here work?
             // The picorv32 getq3 specific values:
             //
             //     func7 = 0b0000000
             //     rd    = ret register
-            //     rs1   = q3
+            //     rs1   = q3           (x3 used in place)
+            //
+            // NOTE: The `.insn` requires a register name for `rs1` but the
+            // compiler is not aware of the `q` registers as they are picorv32
+            // specific. To work around this we use the `x` register
+            // equivalents. In this case we want to read from `q3` which is
+            // offset 3, therefore we use `x3` to achieve this.
             asm!(
-                ".insn r 0b0001011, 0, 0b0000000, {0}, q3, zero",
+                ".insn r 0b0001011, 0, 0b0000000, {0}, x3, zero",
                 out(reg) ret,
                 );
 
@@ -130,14 +138,19 @@ pub unsafe fn setq2(val: u32) -> () {
     match () {
         #[cfg(all(riscv, feature = "inline-asm"))]
         () => {
-            //FIXME Does specifying q2 here work?
             // The picorv32 setq2 specific values:
             //
             //     func7 = 0b0000001
-            //     rd    = q2
+            //     rd    = q2           (x2 used in place)
             //     rs1   = val register
+            //
+            // NOTE: The `.insn` requires a register name for `rd` but the
+            // compiler is not aware of the `q` registers as they are picorv32
+            // specific. To work around this we use the `x` register
+            // equivalents. In this case we want to write to `q2` which is
+            // offset 2, therefore we use `x2` to achieve this.
             asm!(
-                ".insn r 0b0001011, 0, 0b0000001, q2, {0}, zero",
+                ".insn r 0b0001011, 0, 0b0000001, x2, {0}, zero",
                 in(reg) val,
                 );
         }
@@ -168,14 +181,19 @@ pub unsafe fn setq3(val: u32) -> () {
     match () {
         #[cfg(all(riscv, feature = "inline-asm"))]
         () => {
-            //FIXME Does specifying q3 here work?
             // The picorv32 setq3 specific values:
             //
             //     func7 = 0b0000001
-            //     rd    = q3
+            //     rd    = q3           (x3 used in place)
             //     rs1   = val register
+            //
+            // NOTE: The `.insn` requires a register name for `rd` but the
+            // compiler is not aware of the `q` registers as they are picorv32
+            // specific. To work around this we use the `x` register
+            // equivalents. In this case we want to write to `q3` which is
+            // offset 3, therefore we use `x3` to achieve this.
             asm!(
-                ".insn r 0b0001011, 0, 0b0000001, q3, {0}, zero",
+                ".insn r 0b0001011, 0, 0b0000001, x3, {0}, zero",
                 in(reg) val,
                 );
         }
@@ -334,11 +352,11 @@ pub unsafe fn timer(cycles_to_wait: u32) -> u32 {
             //
             //     func7 = 0b0000101
             //     rd    = ret register
-            //     rs1   = n_cycles_to_wait register
+            //     rs1   = cycles_to_wait register
             asm!(
                 ".insn r 0b0001011, 0, 0b0000101, {0}, {1}, zero",
                 out(reg) ret,
-                in(reg) n_cycles_to_wait,
+                in(reg) cycles_to_wait,
                 );
 
             ret
