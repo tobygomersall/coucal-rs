@@ -29,7 +29,6 @@
 /// Each instruction wrapper will set func7, rd and rs1 correctly for their
 /// instruction.
 
-#[cfg(all(riscv, feature = "inline-asm"))]
 use core::arch::asm;
 
 /// `getq` instruction wrapper (`getq __, q2`)
@@ -42,7 +41,7 @@ use core::arch::asm;
 #[cfg(feature = "interrupts-qregs")]
 pub unsafe fn getq2() -> u32 {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             let ret: u32;
 
@@ -65,15 +64,6 @@ pub unsafe fn getq2() -> u32 {
             ret
         }
 
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __getq2() -> u32;
-            }
-
-            __getq2()
-        }
-
         #[cfg(not(riscv))]
         () => unimplemented!(),
     }
@@ -89,7 +79,7 @@ pub unsafe fn getq2() -> u32 {
 #[cfg(feature = "interrupts-qregs")]
 pub unsafe fn getq3() -> u32 {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             let ret: u32;
 
@@ -112,15 +102,6 @@ pub unsafe fn getq3() -> u32 {
             ret
         }
 
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __getq3() -> u32;
-            }
-
-            __getq3()
-        }
-
         #[cfg(not(riscv))]
         () => unimplemented!(),
     }
@@ -136,7 +117,7 @@ pub unsafe fn getq3() -> u32 {
 #[cfg(feature = "interrupts-qregs")]
 pub unsafe fn setq2(val: u32) -> () {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             // The picorv32 setq2 specific values:
             //
@@ -155,15 +136,6 @@ pub unsafe fn setq2(val: u32) -> () {
                 );
         }
 
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __setq2(val: u32) -> ();
-            }
-
-            __setq2(val);
-        }
-
         #[cfg(not(riscv))]
         () => unimplemented!(),
     }
@@ -179,7 +151,7 @@ pub unsafe fn setq2(val: u32) -> () {
 #[cfg(feature = "interrupts-qregs")]
 pub unsafe fn setq3(val: u32) -> () {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             // The picorv32 setq3 specific values:
             //
@@ -198,15 +170,6 @@ pub unsafe fn setq3(val: u32) -> () {
                 );
         }
 
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __setq3(val: u32) -> ();
-            }
-
-            __setq3(val);
-        }
-
         #[cfg(not(riscv))]
         () => unimplemented!(),
     }
@@ -220,7 +183,7 @@ pub unsafe fn setq3(val: u32) -> () {
 #[allow(unused_variables)]
 pub unsafe fn retirq() -> () {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             // The picorv32 retirq specific values:
             //
@@ -230,15 +193,6 @@ pub unsafe fn retirq() -> () {
             asm!(
                 ".insn r 0b0001011, 0, 0b0000010, zero, zero, zero",
                 );
-        }
-
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __retirq() -> u32;
-            }
-
-            __retirq();
         }
 
         #[cfg(not(riscv))]
@@ -258,7 +212,7 @@ pub unsafe fn retirq() -> () {
 #[allow(unused_variables)]
 pub unsafe fn maskirq(mask: u32) -> u32 {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             let ret: u32;
 
@@ -274,15 +228,6 @@ pub unsafe fn maskirq(mask: u32) -> u32 {
                 );
 
             ret
-        }
-
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __maskirq(mask: u32) -> u32;
-            }
-
-            __maskirq(mask)
         }
 
         #[cfg(not(riscv))]
@@ -301,7 +246,7 @@ pub unsafe fn maskirq(mask: u32) -> u32 {
 #[allow(unused_variables)]
 pub unsafe fn waitirq() -> u32 {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             let ret: u32;
 
@@ -316,15 +261,6 @@ pub unsafe fn waitirq() -> u32 {
                 );
 
             ret
-        }
-
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __waitirq() -> u32;
-            }
-
-            __waitirq()
         }
 
         #[cfg(not(riscv))]
@@ -344,7 +280,7 @@ pub unsafe fn waitirq() -> u32 {
 #[allow(unused_variables)]
 pub unsafe fn timer(cycles_to_wait: u32) -> u32 {
     match () {
-        #[cfg(all(riscv, feature = "inline-asm"))]
+        #[cfg(riscv)]
         () => {
             let ret: u32;
 
@@ -360,15 +296,6 @@ pub unsafe fn timer(cycles_to_wait: u32) -> u32 {
                 );
 
             ret
-        }
-
-        #[cfg(all(riscv, not(feature = "inline-asm")))]
-        () => {
-            extern "C" {
-                fn __timer(cycles_to_wait: u32) -> u32;
-            }
-
-            __timer(cycles_to_wait)
         }
 
         #[cfg(not(riscv))]

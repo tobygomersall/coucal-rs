@@ -9,8 +9,3 @@ if [ -n "${TARGET:-}" ]; then
         cargo check --target $TARGET --features inline-asm
     fi
 fi
-
-if [ -n "${CHECK_BLOBS:-}" ]; then
-    PATH="$PATH:$PWD/gcc/bin"
-    ./check-blobs.sh
-fi
