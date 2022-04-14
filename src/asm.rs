@@ -1,33 +1,33 @@
 //! Assembly instructions
 
-/// The picorv32 implements custom interrupt instructions. We use the `.insn`
-/// directive to create the numeric representation of these instructions. For
-/// the `.insn` directive to work we have to specify the instruction format.
-/// The picorv32 uses the R format for the interrupt instructions.
-///
-/// The syntax for an `.insn` directive with R type format is:
-///
-/// ```
-/// .insn r opcode, func3, func7, rd, rs1, rs2
-/// ```
-///
-/// From the [picorv32 manual](https://github.com/YosysHQ/picorv32):
-///
-///     opcode = 0b0001011 [CUSTOM_0]  (Opcode names are not supported)
-///     func3  = ---                   (Don't care)
-///     func7  = Specifies the instruction
-///     rd     = Compiler allocated destination register
-///     rs1    = Compiler allocated source register
-///     rs2    = -----                 (Don't care so set to zero [x0])
-///
-/// The compiler will pad and offset these values correctly for an R type
-/// instruction.
-///
-/// This method frees the compiler to allocate registers and specify them in
-/// the assembly.
-///
-/// Each instruction wrapper will set func7, rd and rs1 correctly for their
-/// instruction.
+// The picorv32 implements custom interrupt instructions. We use the `.insn`
+// directive to create the numeric representation of these instructions. For
+// the `.insn` directive to work we have to specify the instruction format.
+// The picorv32 uses the R format for the interrupt instructions.
+//
+// The syntax for an `.insn` directive with R type format is:
+//
+// ```
+// .insn r opcode, func3, func7, rd, rs1, rs2
+// ```
+//
+// From the [picorv32 manual](https://github.com/YosysHQ/picorv32):
+//
+//     opcode = 0b0001011 [CUSTOM_0]  (Opcode names are not supported)
+//     func3  = ---                   (Don't care)
+//     func7  = Specifies the instruction
+//     rd     = Compiler allocated destination register
+//     rs1    = Compiler allocated source register
+//     rs2    = -----                 (Don't care so set to zero [x0])
+//
+// The compiler will pad and offset these values correctly for an R type
+// instruction.
+//
+// This method frees the compiler to allocate registers and specify them in
+// the assembly.
+//
+// Each instruction wrapper will set func7, rd and rs1 correctly for their
+// instruction.
 
 use core::arch::asm;
 
@@ -202,9 +202,9 @@ pub unsafe fn retirq() -> () {
 
 /// `maskirq` instruction wrapper
 ///
-/// The "IRQ Mask" register contains a bitmask of masked (disabled)
-/// interrupts. This function writes a new value to the irq mask register
-/// and returns the old value.
+/// This function writes a new value to the irq mask register and returns the
+/// old value. The "IRQ Mask" register contains a bitmask of masked (disabled)
+/// interrupts.
 ///
 /// The mask argument is 32 bits. A `0b1` at any offset in `mask` disables
 /// that interrupt.
@@ -237,8 +237,8 @@ pub unsafe fn maskirq(mask: u32) -> u32 {
 
 /// `waitirq` instruction wrapper
 ///
-/// Pause execution until an interrupt becomes pending. The bitmask of pending
-/// IRQs is returned.
+/// This function blocks until an interrupt becomes pending. The bitmask of
+/// pending IRQs is returned.
 ///
 /// A `0b1` at any offset in the return value indicates an interrupt is
 /// pending on that interrupt line.
