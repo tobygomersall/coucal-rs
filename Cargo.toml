@@ -1,8 +1,8 @@
 [package]
-name = "picorv32"
+name = "coucal-rs"
 version = "0.1.4"
-repository = "https://github.com/ilya-epifanov/picorv32"
-authors = ["Ilya Epifanov <elijah.epifanov@gmail.com>"]
+repository = "https://github.com/tobygomersall/coucal-rs"
+authors = ["Toby Gomersall <toby.gomersall@smartacoustics.co.uk>"]
 categories = ["embedded", "hardware-support", "no-std"]
 description = "Low level access to picorv32 RISC-V processor"
 keywords = ["riscv", "register", "peripheral"]
@@ -16,6 +16,5 @@ bare-metal = "0.2.0"
 regex = "1.2.0"
 
 [features]
-inline-asm = [] # No longer used but left for backwards compatibility
 const-fn = ["bare-metal/const-fn"]
 interrupts-qregs = []
