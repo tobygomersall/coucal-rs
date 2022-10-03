@@ -1,7 +1,3 @@
-[![crates.io](https://img.shields.io/crates/d/picorv32.svg)](https://crates.io/crates/picorv32)
-[![crates.io](https://img.shields.io/crates/v/picorv32.svg)](https://crates.io/crates/picorv32)
-[![Build Status](https://travis-ci.org/ilya-epifanov/picorv32-rs.svg?branch=master)](https://travis-ci.org/ilya-epifanov/picorv32-rs)
-
 # `coucal-rs`
 
 > Low level access to PicoRV32 RISC-V processor
